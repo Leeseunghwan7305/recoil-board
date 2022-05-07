@@ -6,18 +6,20 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
 import { GlobalStyle } from "./reset";
 import { RecoilRoot } from "recoil";
+import { ThemeProvider } from "styled-components";
+import { theme } from "./component/theme/theme";
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  <React.StrictMode>
+  <BrowserRouter>
     <RecoilRoot>
-      <BrowserRouter>
+      <ThemeProvider theme={theme}>
         <GlobalStyle />
         <App />
-      </BrowserRouter>
+      </ThemeProvider>
     </RecoilRoot>
-  </React.StrictMode>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

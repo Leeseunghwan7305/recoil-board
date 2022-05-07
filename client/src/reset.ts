@@ -52,7 +52,7 @@ table {
   box-sizing: border-box;
 }
 body {
-  font-family: 'Nanum Pen Script', cursive;
+  font-weight:300;
   
 }
 a {
