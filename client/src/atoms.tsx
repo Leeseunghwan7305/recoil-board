@@ -16,3 +16,8 @@ export const hourSelector = selector<number>({
     set(minuteState, minutes); //수정하고싶은 아톰 , 수정할값
   }, //atom 을 수정하는걸 도와줌
 });
+
+export const toDoState = atom<string[]>({
+  key: "toDo",
+  default: ["a", "b", "c", "d", "e", "f"],
+});

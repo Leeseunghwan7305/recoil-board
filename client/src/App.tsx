@@ -1,6 +1,13 @@
 import React from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "react-beautiful-dnd";
+import { RecoilState, useRecoilState } from "recoil";
 import styled from "styled-components";
+import { toDoState } from "./atoms";
 const Wrapper = styled.div`
   display: flex;
   max-width: 480px;
@@ -32,10 +39,19 @@ const Card = styled.div`
   background-color: ${(props) => props.theme.cardColor};
 `;
 
-const toDos = ["a", "b", "c", "d", "e", "f"];
 const App = () => {
+  const [toDos, setToDos] = useRecoilState(toDoState);
   //드래그의 멈취 영역 설정 &&드래그드랍콘택트는 children필요함
-  const onDragEnd = () => {};
+  const onDragEnd = ({ destination, source }: DropResult) => {
+    //도착지와 출발지
+    console.log(destination);
+    console.log(source);
+    let toDo = [...toDos];
+    let startValue = toDo.splice(source.index, 1);
+    let endValue = toDo.splice(destination.index, 1);
+
+    //setToDos();
+  };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
@@ -45,7 +61,7 @@ const App = () => {
               <Board ref={magic.innerRef} {...magic.droppableProps}>
                 {toDos.map((toDo, index) => {
                   return (
-                    <Draggable draggableId={toDo} index={index}>
+                    <Draggable key={index} draggableId={toDo} index={index}>
                       {(magic) => (
                         <Card
                           ref={magic.innerRef}
