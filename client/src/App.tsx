@@ -42,15 +42,18 @@ const Card = styled.div`
 const App = () => {
   const [toDos, setToDos] = useRecoilState(toDoState);
   //드래그의 멈취 영역 설정 &&드래그드랍콘택트는 children필요함
-  const onDragEnd = ({ destination, source }: DropResult) => {
-    //도착지와 출발지
-    console.log(destination);
-    console.log(source);
-    let toDo = [...toDos];
-    let startValue = toDo.splice(source.index, 1);
-    let endValue = toDo.splice(destination.index, 1);
+  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
+    if (!destination) return;
+    setToDos((oldToDos) => {
+      const copyToDos = [...oldToDos];
 
-    //setToDos();
+      copyToDos.splice(source.index, 1); // 도착 인덱스를 지움
+      console.log("Put back", draggableId, "on ", destination.index);
+      console.log(destination); //draggableId== toDos의 클릭한 요소
+      console.log(source);
+      copyToDos.splice(destination?.index, 0, draggableId);
+      return copyToDos;
+    });
   };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
@@ -61,7 +64,7 @@ const App = () => {
               <Board ref={magic.innerRef} {...magic.droppableProps}>
                 {toDos.map((toDo, index) => {
                   return (
-                    <Draggable key={index} draggableId={toDo} index={index}>
+                    <Draggable key={toDo} draggableId={toDo} index={index}>
                       {(magic) => (
                         <Card
                           ref={magic.innerRef}

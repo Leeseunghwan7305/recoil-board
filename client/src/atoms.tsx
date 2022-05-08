@@ -21,3 +21,4 @@ export const toDoState = atom<string[]>({
   key: "toDo",
   default: ["a", "b", "c", "d", "e", "f"],
 });
+//splice 원본 배열이 바뀜
