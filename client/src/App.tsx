@@ -8,6 +8,7 @@ import {
 import { RecoilState, useRecoilState } from "recoil";
 import styled from "styled-components";
 import { toDoState } from "./atoms";
+import DragabbleCard from "./component/DragabbleCard/DragabbleCard";
 const Wrapper = styled.div`
   display: flex;
   max-width: 480px;
@@ -62,21 +63,9 @@ const App = () => {
           <Droppable droppableId="one">
             {(magic) => (
               <Board ref={magic.innerRef} {...magic.droppableProps}>
-                {toDos.map((toDo, index) => {
-                  return (
-                    <Draggable key={toDo} draggableId={toDo} index={index}>
-                      {(magic) => (
-                        <Card
-                          ref={magic.innerRef}
-                          {...magic.dragHandleProps}
-                          {...magic.draggableProps}
-                        >
-                          {toDo}
-                        </Card>
-                      )}
-                    </Draggable>
-                  );
-                })}
+                {toDos.map((toDo, index) => (
+                  <DragabbleCard key={toDo} index={index} toDo={toDo} />
+                ))}
                 {magic.placeholder}
               </Board>
             )}
