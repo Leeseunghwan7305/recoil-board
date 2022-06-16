@@ -4,16 +4,18 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { RecoilRoot } from "recoil";
+import { ThemeProvider } from "styled-components";
+import { darkTheme } from "./Theme";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <RecoilRoot>
+  <RecoilRoot>
+    <ThemeProvider theme={darkTheme}>
       <App />
-    </RecoilRoot>
-  </React.StrictMode>
+    </ThemeProvider>
+  </RecoilRoot>
 );
 
 // If you want to start measuring performance in your app, pass a function
