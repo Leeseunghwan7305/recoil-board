@@ -2,8 +2,13 @@ import React, { InputHTMLAttributes } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import { RecoilState, useRecoilState, useRecoilValue } from "recoil";
-import { hourSelector, minuteState } from "./atom";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { atomTodo } from "./atom";
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from "react-beautiful-dnd";
 import styled from "styled-components";
 import { getModeForUsageLocation } from "typescript";
 
@@ -29,8 +34,18 @@ const Llist = styled.li`
   padding: 15px;
 `;
 function App() {
-  let Todo = ["a", "b", "c", "d", "e", "f"];
-  const onDragEnd = () => {};
+  const [Todo, setTodo] = useRecoilState(atomTodo);
+  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
+    if (!destination) return;
+    setTodo((oldToDos) => {
+      const copyToDos = [...oldToDos];
+      copyToDos.splice(source.index, 1);
+      if (destination) {
+        copyToDos.splice(destination?.index, 0, draggableId);
+      }
+      return copyToDos;
+    });
+  };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
@@ -38,7 +53,7 @@ function App() {
           {(magic) => (
             <Ulist ref={magic.innerRef} {...magic.droppableProps}>
               {Todo.map((todo, index) => (
-                <Draggable draggableId={todo} index={index}>
+                <Draggable key={todo} draggableId={todo} index={index}>
                   {(magic) => (
                     <Llist
                       ref={magic.innerRef}
