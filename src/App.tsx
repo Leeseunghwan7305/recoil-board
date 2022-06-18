@@ -11,6 +11,7 @@ import {
 } from "react-beautiful-dnd";
 import styled from "styled-components";
 import { getModeForUsageLocation } from "typescript";
+import DraggableCard from "./Components/DraggableCard";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -28,12 +29,9 @@ const Ulist = styled.ul`
 
   padding: 10px 30px;
 `;
-const Llist = styled.li`
-  font-size: 16px;
-  background-color: yellowgreen;
-  padding: 15px;
-`;
+
 function App() {
+  console.log("hi");
   const [Todo, setTodo] = useRecoilState(atomTodo);
   const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
     if (!destination) return;
@@ -53,17 +51,11 @@ function App() {
           {(magic) => (
             <Ulist ref={magic.innerRef} {...magic.droppableProps}>
               {Todo.map((todo, index) => (
-                <Draggable key={todo} draggableId={todo} index={index}>
-                  {(magic) => (
-                    <Llist
-                      ref={magic.innerRef}
-                      {...magic.draggableProps}
-                      {...magic.dragHandleProps}
-                    >
-                      {todo}
-                    </Llist>
-                  )}
-                </Draggable>
+                <DraggableCard
+                  key={todo}
+                  index={index}
+                  todo={todo}
+                ></DraggableCard>
               ))}
               {magic.placeholder}
             </Ulist>
