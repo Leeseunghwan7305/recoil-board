@@ -10,6 +10,10 @@ const Wrapper = styled.ul`
   width: 150px;
   border-radius: 5px;
 `;
+const Title = styled.h1`
+  font-size: 16px;
+  text-align: center;
+`;
 interface IBoardProps {
   toDos: string[];
   boardID: string;
@@ -19,6 +23,7 @@ const Board = ({ toDos, boardID }: IBoardProps) => {
     <Droppable droppableId={boardID}>
       {(magic) => (
         <Wrapper ref={magic.innerRef} {...magic.droppableProps}>
+          <Title>{boardID}</Title>
           {toDos.map((todo, index) => (
             <DraggableCard key={todo} index={index} todo={todo}></DraggableCard>
           ))}

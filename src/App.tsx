@@ -10,7 +10,7 @@ import {
   DropResult,
 } from "react-beautiful-dnd";
 import styled from "styled-components";
-import { getModeForUsageLocation } from "typescript";
+import { getModeForUsageLocation, getTextOfJSDocComment } from "typescript";
 import DraggableCard from "./Components/DraggableCard";
 import Board from "./Components/Board";
 
@@ -26,17 +26,33 @@ const Wrapper = styled.div`
 
 function App() {
   const [Todo, setTodo] = useRecoilState(atomTodo);
-  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
+  const onDragEnd = (info: DropResult) => {
+    const { draggableId, source, destination } = info;
     if (!destination) return;
-    /*setTodo((oldToDos) => {
-      const copyToDos = [...oldToDos];
-      copyToDos.splice(source.index, 1);
-      if (destination) {
-        copyToDos.splice(destination?.index, 0, draggableId);
-      }
-      return copyToDos;
-    });*/
+    if (source.droppableId == destination.droppableId) {
+      setTodo((allBoard) => {
+        let copyBoard = [...allBoard[source.droppableId]];
+        copyBoard.splice(source.index, 1);
+        copyBoard.splice(destination.index, 0, draggableId);
+
+        return { ...allBoard, [source.droppableId]: copyBoard };
+      });
+    }
+    if (destination.droppableId != source.droppableId) {
+      setTodo((allBoard) => {
+        let startBoard = [...allBoard[source.droppableId]];
+        let destinBoard = [...allBoard[destination.droppableId]];
+        startBoard.splice(source.index, 1);
+        destinBoard.splice(destination?.index, 0, draggableId);
+        return {
+          ...allBoard,
+          [source.droppableId]: startBoard,
+          [destination.droppableId]: destinBoard,
+        };
+      });
+    }
   };
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
