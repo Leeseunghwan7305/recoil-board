@@ -5,9 +5,11 @@ interface IDragabbleCardProps {
   todo: string;
   index: number;
 }
-const Llist = styled.li`
+const Llist = styled.li<{ isDragging: boolean }>`
   font-size: 16px;
-  background-color: yellowgreen;
+  background-color: ${(props) => (props.isDragging ? "#FFD887" : "#C4FCEF")};
+  box-shadow: ${(props) =>
+    props.isDragging ? "0px 2px 5px rgba(0,0,0,0.5)" : "none"};
   padding: 15px;
   margin: 5px 0;
   border-radius: 5px;
@@ -17,8 +19,9 @@ const DraggableCard = ({ todo, index }: IDragabbleCardProps) => {
   console.log(todo);
   return (
     <Draggable key={todo} draggableId={todo} index={index}>
-      {(magic) => (
+      {(magic, info) => (
         <Llist
+          isDragging={info.isDragging}
           ref={magic.innerRef}
           {...magic.draggableProps}
           {...magic.dragHandleProps}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { InputHTMLAttributes, useRef } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import DraggableCard from "./DraggableCard";
@@ -24,10 +24,12 @@ const Area = styled.div<IDragging>`
   flex-grow: 1;
   background-color: ${(props) =>
     props.isDraggingOver
-      ? "pink"
+      ? "#05C19C"
       : props.isDraggingFromThis
-      ? "red"
+      ? "#65FBD2"
       : "transparent"};
+  border-radius: 5%;
+  padding: 10px;
   transition: all 0.5s;
 `;
 interface IDragging {
@@ -39,9 +41,20 @@ interface IBoardProps {
   boardID: string;
 }
 const Board = ({ toDos, boardID }: IBoardProps) => {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const sendTodo = () => {
+    inputRef.current?.focus();
+    if (inputRef.current?.value) inputRef.current.value = "";
+    setTimeout(() => {
+      inputRef.current?.blur();
+    }, 5000);
+  };
+
   return (
     <Wrapper>
       <Title>{boardID}</Title>
+      <input ref={inputRef} placeholder="grap me"></input>
+      <button onClick={sendTodo}>Click me</button>
       <Droppable droppableId={boardID}>
         {(magic, info) => (
           <Area
