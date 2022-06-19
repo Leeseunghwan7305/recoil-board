@@ -11,6 +11,7 @@ const Llist = styled.li`
   padding: 15px;
   margin: 5px 0;
   border-radius: 5px;
+  flex-grow: 1;
 `;
 const DraggableCard = ({ todo, index }: IDragabbleCardProps) => {
   console.log(todo);
