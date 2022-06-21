@@ -4,7 +4,7 @@ export interface ITodo {
   id: number;
   text: string;
 }
-interface IToDoState {
+export interface IToDoState {
   [key: string]: ITodo[];
 }
 export const atomTodo = atom<IToDoState>({

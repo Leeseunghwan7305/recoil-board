@@ -1,10 +1,11 @@
-import React, { InputHTMLAttributes, useRef } from "react";
+import React, { InputHTMLAttributes, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import DraggableCard from "./DraggableCard";
-import { atomTodo, ITodo } from "../atom";
+import { atomTodo, ITodo, IToDoState } from "../atom";
 import { useRecoilState, useSetRecoilState } from "recoil";
+import { stringify } from "querystring";
 const Wrapper = styled.ul`
   list-style: none;
   background-color: ${(props) => props.theme.boardColor};
@@ -58,12 +59,26 @@ const Board = ({ toDos, boardID }: IBoardProps) => {
   const [Todo, setTodo] = useRecoilState(atomTodo);
   const { register, setValue, handleSubmit } = useForm<IForm>();
   const inputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (!localStorage.getItem("Todo")) return;
+    let list = JSON.parse(localStorage.getItem("Todo")!) as IToDoState;
+
+    setTodo(() => {
+      return list;
+    });
+  }, []);
   const onValid = ({ toDo }: IForm) => {
     const newTodo = {
       id: Date.now(),
       text: toDo,
     };
-
+    localStorage.setItem(
+      "Todo",
+      JSON.stringify({
+        ...Todo,
+        [boardID]: [...Todo[boardID], newTodo],
+      })
+    );
     setTodo((allBoards) => {
       return { ...allBoards, [boardID]: [...allBoards[boardID], newTodo] };
     });
