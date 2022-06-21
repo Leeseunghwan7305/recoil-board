@@ -1,7 +1,10 @@
 import React, { InputHTMLAttributes, useRef } from "react";
+import { useForm } from "react-hook-form";
 import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import DraggableCard from "./DraggableCard";
+import { atomTodo, ITodo } from "../atom";
+import { useRecoilState, useSetRecoilState } from "recoil";
 const Wrapper = styled.ul`
   list-style: none;
   background-color: ${(props) => props.theme.boardColor};
@@ -37,11 +40,37 @@ interface IDragging {
   isDraggingFromThis: boolean;
 }
 interface IBoardProps {
-  toDos: string[];
+  toDos: ITodo[];
   boardID: string;
 }
+interface IForm {
+  toDo: string;
+}
+const Form = styled.form`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`;
+const Input = styled.input`
+  width: 80%;
+`;
 const Board = ({ toDos, boardID }: IBoardProps) => {
+  const [Todo, setTodo] = useRecoilState(atomTodo);
+  const { register, setValue, handleSubmit } = useForm<IForm>();
   const inputRef = useRef<HTMLInputElement>(null);
+  const onValid = ({ toDo }: IForm) => {
+    const newTodo = {
+      id: Date.now(),
+      text: toDo,
+    };
+
+    setTodo((allBoards) => {
+      return { ...allBoards, [boardID]: [...allBoards[boardID], newTodo] };
+    });
+
+    setValue("toDo", "");
+  };
+
   const sendTodo = () => {
     inputRef.current?.focus();
     if (inputRef.current?.value) inputRef.current.value = "";
@@ -53,8 +82,13 @@ const Board = ({ toDos, boardID }: IBoardProps) => {
   return (
     <Wrapper>
       <Title>{boardID}</Title>
-      <input ref={inputRef} placeholder="grap me"></input>
-      <button onClick={sendTodo}>Click me</button>
+      <Form onSubmit={handleSubmit(onValid)}>
+        <Input
+          {...register("toDo", { required: true })}
+          type="text"
+          placeholder={`Add task on ${boardID}`}
+        />
+      </Form>
       <Droppable droppableId={boardID}>
         {(magic, info) => (
           <Area
@@ -63,12 +97,13 @@ const Board = ({ toDos, boardID }: IBoardProps) => {
             ref={magic.innerRef}
             {...magic.droppableProps}
           >
-            {toDos.map((todo, index) => (
+            {toDos.map((toDo, index) => (
               <DraggableCard
-                key={todo}
+                key={toDo.id}
                 index={index}
-                todo={todo}
-              ></DraggableCard>
+                toDoId={toDo.id}
+                toDoText={toDo.text}
+              />
             ))}
             {magic.placeholder}
           </Area>

@@ -2,7 +2,8 @@ import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 interface IDragabbleCardProps {
-  todo: string;
+  toDoId: number;
+  toDoText: string;
   index: number;
 }
 const Llist = styled.li<{ isDragging: boolean }>`
@@ -15,10 +16,9 @@ const Llist = styled.li<{ isDragging: boolean }>`
   border-radius: 5px;
   flex-grow: 1;
 `;
-const DraggableCard = ({ todo, index }: IDragabbleCardProps) => {
-  console.log(todo);
+const DraggableCard = ({ toDoId, toDoText, index }: IDragabbleCardProps) => {
   return (
-    <Draggable key={todo} draggableId={todo} index={index}>
+    <Draggable draggableId={toDoId + ""} index={index}>
       {(magic, info) => (
         <Llist
           isDragging={info.isDragging}
@@ -26,7 +26,7 @@ const DraggableCard = ({ todo, index }: IDragabbleCardProps) => {
           {...magic.draggableProps}
           {...magic.dragHandleProps}
         >
-          {todo}
+          {toDoText}
         </Llist>
       )}
     </Draggable>

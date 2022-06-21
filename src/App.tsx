@@ -32,8 +32,9 @@ function App() {
     if (source.droppableId == destination.droppableId) {
       setTodo((allBoard) => {
         let copyBoard = [...allBoard[source.droppableId]];
+        const taskObj = copyBoard[source.index];
         copyBoard.splice(source.index, 1);
-        copyBoard.splice(destination.index, 0, draggableId);
+        copyBoard.splice(destination.index, 0, taskObj);
 
         return { ...allBoard, [source.droppableId]: copyBoard };
       });
@@ -42,8 +43,9 @@ function App() {
       setTodo((allBoard) => {
         let startBoard = [...allBoard[source.droppableId]];
         let destinBoard = [...allBoard[destination.droppableId]];
+        const taskObj = startBoard[source.index];
         startBoard.splice(source.index, 1);
-        destinBoard.splice(destination?.index, 0, draggableId);
+        destinBoard.splice(destination?.index, 0, taskObj);
         return {
           ...allBoard,
           [source.droppableId]: startBoard,
