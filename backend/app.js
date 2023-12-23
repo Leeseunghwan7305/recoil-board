@@ -3,7 +3,7 @@ const path = require("path");
 
 const app = express();
 
-app.set("port", 8080);
+app.set("port", 8081);
 
 app.use(express.static(path.join(__dirname, "../frontend/build")));
 
