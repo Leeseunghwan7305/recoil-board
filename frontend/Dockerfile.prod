@@ -1,0 +1,18 @@
+# Node.js 14 기반 이미지 선택
+FROM node:14-alpine
+
+# 앱 디렉터리 생성 및 설정
+WORKDIR /app
+
+# 앱 종속성 설치
+COPY package*.json ./
+RUN npm install
+
+# 앱 소스 추가
+COPY . .
+
+# 앱 빌드
+RUN npm run build
+
+# 앱 실행
+CMD ["npm", "start"]

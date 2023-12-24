@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  frontend:
+    build:
+      context: ./frontend # frontend 폴더에서 Dockerfile을 찾음
+    ports:
+      - "3000:3000" # 포트 매핑
+
+  backend:
+    build:
+      context: ./backend # backend 폴더에서 Dockerfile을 찾음
+    ports:
+      - "8081:8081" # 포트 매핑
