@@ -1,3 +1,4 @@
+# front
 # Node.js 14 기반 이미지 선택
 FROM node:14-alpine
 
@@ -8,11 +9,11 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
+# 앱 빌드
 # 앱 소스 추가
 COPY . .
-
-# 앱 빌드
 RUN npm run build
+
 
 # 앱 실행
 CMD ["npm", "start"]
